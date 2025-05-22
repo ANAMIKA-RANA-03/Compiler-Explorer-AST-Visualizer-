@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AST Visualizer</title>
+  <!-- Import Google Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Import Materialize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.2.0/codeflask.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+    }
+    .nav-wrapper {
+      background: linear-gradient(90deg, #3949ab, #1e88e5);
+    }
+    h5 {
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+    .section {
+      padding: 40px 30px;
+      background: white;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    iframe {
+      width: 100%;
+      border-radius: 8px;
+    }
+    a {
+      color: #1e88e5;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav>
+  <div class="nav-wrapper">
+    <a href="index.html" class="brand-logo right" style="padding-right: 20px;">AST Visualizer</a>
+    <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <li><a href="index.html">Visualizer</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="section">
+    <h5>Understanding Abstract Syntax Trees</h5>
+    <p>To understand Abstract Syntax Trees (ASTs), let’s walk through how JavaScript is processed by modern browsers.</p>
+
+    <p>Traditionally, compilers used a multi-stage process:</p>
+    <p><strong>Lexer → Parser → Translator → Interpreter</strong></p>
+
+    <p>The lexer breaks the code into tokens, which the parser transforms into an Abstract Syntax Tree—a tree-structured representation of the source code. The translator converts this tree into bytecode, which the interpreter finally translates into machine code.</p>
+
+    <p>This pipeline, although functional, isn’t ideal for performance—especially in dynamic languages like JavaScript.</p>
+
+    <p>To solve this, <strong>Just-In-Time (JIT)</strong> compilers emerged. They compile code at runtime, optimizing performance significantly.</p>
+
+    <p>In browsers today, the JS engine converts code to ASTs using lexical analyzers and parsers. These ASTs are then used to generate machine code for execution.</p>
+
+    <p><strong>So, why are ASTs important?</strong> Because they offer a flexible, abstract view of source code, enabling tasks such as:</p>
+    <ul class="browser-default">
+      <li>Syntax analysis</li>
+      <li>Documentation extraction</li>
+      <li>Type checking</li>
+      <li>Code transformations (e.g., transpilation, formatting, refactoring)</li>
+    </ul>
+
+    <p>Modern tools like linters, formatters, and IDEs rely heavily on ASTs to provide better developer experiences.</p>
+  </div>
+
+  <div class="section">
+    <h5>Conference Talk Reference</h5>
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/8uOXIM4giH8?rel=0&controls=0&showinfo=0" allowfullscreen></iframe>
+    </div>
+    <p>Watch this talk by <strong>Jamund Ferguson</strong>. Connect with him on <a href="https://github.com/xjamundx" target="_blank">GitHub</a>.</p>
+  </div>
+
+  <div class="section">
+    <h5>Further Reading</h5>
+    <p>🔗 <a href="https://github.com/estree/estree" target="_blank">ESTree Specification</a></p>
+    <p>🔗 <a href="http://esprima.org/doc/index.html" target="_blank">Esprima Usage Guide</a></p>
+  </div>
+</div>
+
+<!-- JS Scripts -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.2.0/codeflask.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/esprima/2.7.3/esprima.min.js"></script>
+<script src="src/vendor/ast-traverse.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.min.js"></script>
+<script src="src/js/main.js"></script>
+</body>
+</html>

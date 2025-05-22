@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Fonts & Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+
+  <!-- Materialize CSS -->
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" media="screen,projection" />
+
+  <!-- CodeFlask + Prism -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.2.0/codeflask.css">
+
+  <!-- Meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Custom Styles -->
+  <style>
+    body {
+      background: #0e1f2f;
+      color: #e0f7fa;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .brand-logo {
+      font-size: 2rem;
+      animation: glow 2.5s ease-in-out infinite alternate;
+      text-shadow: 0 0 10px #64b5f6, 0 0 20px #42a5f5, 0 0 30px #1e88e5;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #42a5f5, 0 0 10px #1e88e5;
+      }
+      to {
+        text-shadow: 0 0 20px #64b5f6, 0 0 30px #42a5f5, 0 0 40px #1e88e5;
+      }
+    }
+
+    .fade-slide-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeSlideIn 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #my-code-wrapper {
+      width: 100%;
+      height: 100vh;
+      background-color: #1e1e1e;
+      padding: 10px;
+      color: white;
+    }
+
+    #ast-wrapper {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+    }
+
+    .node circle {
+      fill: #0e1f2f;
+      stroke: #00bcd4;
+      stroke-width: 3px;
+    }
+
+    .node text {
+      fill: white;
+      font: 12px sans-serif;
+    }
+
+    .link {
+      fill: none;
+      stroke: #90caf9;
+      stroke-width: 2px;
+    }
+
+    .dark-mode-toggle {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .typing {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 3px solid #42a5f5;
+      width: 0;
+      animation: typing 3s steps(30, end) forwards, blink .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #42a5f5; }
+    }
+
+    canvas.particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Particle Background -->
+  <canvas id="particles-js" class="particles"></canvas>
+
+  <!-- Navbar -->
+  <nav class="blue darken-3">
+    <div class="nav-wrapper">
+      <a href="index.html" class="brand-logo right">AST Visualizer</a>
+      <ul id="nav-mobile" class="left">
+        <li><a href="index.html">Visualizer</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Layout -->
+  <div class="row">
+    <div class="col s12 m4 l3">
+    <div id="editor-container">
+      <div id="my-code-wrapper"></div>
+      <div id="error" style="color: red; margin: 0.5em 0;"></div>
+    </div>
+  </div>
+
+
+    <div class="col s12 m8 l9">
+      <div class="row">
+        <div class="col s12 fade-slide-in">
+          <h5 class="white-text typing">Explore Your JavaScript's Abstract Syntax Tree</h5>
+          <ul class="tabs blue lighten-2">
+            <li class="tab col s4"><a class="active white-text" href="#test1">Tree</a></li>
+            <li class="tab col s4"><a class="white-text" href="#test2">Usage</a></li>
+            <li class="tab col s4"><a class="white-text" href="#test3">AST</a></li>
+          </ul>
+        </div>
+
+        <div id="test1" class="col s12 fade-slide-in" style="padding-top: 20px;"></div>
+        <div id="test2" class="col s12 fade-slide-in" style="padding-top: 20px;"></div>
+        <div id="test3" class="col s12 fade-slide-in" style="padding-top: 20px;">
+          <div id="ast-wrapper" data-language="javascript"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.2.0/codeflask.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/esprima/2.7.3/esprima.min.js"></script>
+  <script src="src/vendor/ast-traverse.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.min.js"></script>
+  <script src="./src/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script>
+    particlesJS.load('particles-js', 'https://cdn.jsdelivr.net/gh/VincentGarreau/particles.js@master/demo/particles.json');
+  </script>
+</body>
+</html>
