@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <!-- Google Fonts & Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
 
   <!-- Materialize CSS -->
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" media="screen,projection" />
+  <link type="text/css" rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
+    media="screen,projection" />
 
   <!-- CodeFlask + Prism -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism-tomorrow.min.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism-tomorrow.min.css"> -->
+  <!-- new -->
+  <link id="prism-theme" rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism-tomorrow.min.css">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/CodeFlask.js/0.2.0/codeflask.css">
 
   <!-- Meta -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Custom Styles -->
   <style>
@@ -33,6 +40,7 @@
       from {
         text-shadow: 0 0 5px #42a5f5, 0 0 10px #1e88e5;
       }
+
       to {
         text-shadow: 0 0 20px #64b5f6, 0 0 30px #42a5f5, 0 0 40px #1e88e5;
       }
@@ -97,20 +105,109 @@
     }
 
     @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
     }
 
     @keyframes blink {
-      from, to { border-color: transparent }
-      50% { border-color: #42a5f5; }
+
+      from,
+      to {
+        border-color: transparent
+      }
+
+      50% {
+        border-color: #42a5f5;
+      }
     }
 
     canvas.particles {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: -1;
+    }
+
+    /* new changes */
+    body.light-mode {
+      background: #ffffff;
+      color: #111111;
+    }
+
+    body.light-mode nav {
+      background: #eeeeee !important;
+      color: #000 !important;
+    }
+
+    body.light-mode .tabs {
+      background-color: #ddd !important;
+    }
+
+    body.light-mode .brand-logo,
+    body.light-mode .tabs a {
+      color: #000 !important;
+    }
+
+    body.light-mode #my-code-wrapper {
+      background-color: #f0f0f0;
+      color: black;
+    }
+
+    body.light-mode .node circle {
+      fill: #ffffff;
+      stroke: #1976d2;
+    }
+
+    body.light-mode .node text {
+      fill: black;
+    }
+
+    body.light-mode .link {
+      stroke: #1976d2;
+    }
+
+    body.light-mode table.highlight {
+      background-color: #fafafa;
+      color: black;
+    }
+
+    body.light-mode svg text {
+      fill: black;
+    }
+
+    /* newest */
+    #theme-select {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #42a5f5;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    body.light-mode #theme-select {
+      background-color: #f0f0f0;
+      color: #111111;
+      border: 1px solid #ccc;
+    }
+
+    /* coy */
+    /* Prism Coy override fix */
+    .codeflask pre {
+      background-color: #ffffff !important;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    body:not(.light-mode) .codeflask pre {
+      background-color: #1e1e1e !important;
     }
   </style>
 </head>
@@ -123,6 +220,9 @@
   <nav class="blue darken-3">
     <div class="nav-wrapper">
       <a href="index.html" class="brand-logo right">AST Visualizer</a>
+      <!-- new changes -->
+      <a id="mode-toggle" class="btn-flat white-text" style="margin-left: 20px;">🌙</a>
+
       <ul id="nav-mobile" class="left">
         <li><a href="index.html">Visualizer</a></li>
         <li><a href="about.html">About</a></li>
@@ -130,14 +230,27 @@
     </div>
   </nav>
 
+  <!-- new -->
+  <div style="padding: 10px 20px;">
+    <label for="theme-select" style="color: white;">Choose Prism Theme:</label>
+    <select id="theme-select" class="browser-default" style="max-width: 250px;">
+      <option value="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism-tomorrow.min.css" selected>Tomorrow
+        (Dark)</option>
+      <option value="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism.css">Default (Light)</option>
+      <option value="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism-coy.min.css">Coy</option>
+      <option value="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.1/themes/prism-okaidia.min.css">Okaidia</option>
+    </select>
+  </div>
+
+
   <!-- Layout -->
   <div class="row">
     <div class="col s12 m4 l3">
-    <div id="editor-container">
-      <div id="my-code-wrapper"></div>
-      <div id="error" style="color: red; margin: 0.5em 0;"></div>
+      <div id="editor-container">
+        <div id="my-code-wrapper"></div>
+        <div id="error" style="color: red; margin: 0.5em 0;"></div>
+      </div>
     </div>
-  </div>
 
 
     <div class="col s12 m8 l9">
@@ -148,13 +261,22 @@
             <li class="tab col s4"><a class="active white-text" href="#test1">Tree</a></li>
             <li class="tab col s4"><a class="white-text" href="#test2">Usage</a></li>
             <li class="tab col s4"><a class="white-text" href="#test3">AST</a></li>
+            <!-- new addition -->
+            <li class="tab col s4"><a class="white-text" href="#test4">Chart</a></li>
+
           </ul>
         </div>
 
         <div id="test1" class="col s12 fade-slide-in" style="padding-top: 20px;"></div>
         <div id="test2" class="col s12 fade-slide-in" style="padding-top: 20px;"></div>
         <div id="test3" class="col s12 fade-slide-in" style="padding-top: 20px;">
+
+
           <div id="ast-wrapper" data-language="javascript"></div>
+        </div>
+        <!-- new addition -->
+        <div id="test4" class="col s12 fade-slide-in" style="padding-top: 20px;">
+          <svg id="chart" width="660" height="500"></svg>
         </div>
       </div>
     </div>
@@ -172,6 +294,19 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script>
     particlesJS.load('particles-js', 'https://cdn.jsdelivr.net/gh/VincentGarreau/particles.js@master/demo/particles.json');
+    //new
+    document.getElementById("theme-select").addEventListener("change", function (e) {
+      const selectedTheme = e.target.value;
+      const themeLink = document.getElementById("prism-theme");
+      if (themeLink) {
+        themeLink.setAttribute("href", selectedTheme);
+      }
+    });
   </script>
+
+
+  </div>
+
 </body>
+
 </html>
